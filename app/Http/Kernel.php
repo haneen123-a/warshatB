@@ -50,8 +50,8 @@ class Kernel extends HttpKernel
      *
      * @var array
      */
-    protected $routeMiddleware = [
-        //'auth' => \App\Http\Middleware\Authenticate::class,
+   protected $middlewareAliases = [
+        'auth' => \Illuminate\Auth\Middleware\Authenticate::class,
         'auth.basic' => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,
         'cache.headers' => \Illuminate\Http\Middleware\SetCacheHeaders::class,
         'can' => \Illuminate\Auth\Middleware\Authorize::class,
@@ -60,8 +60,11 @@ class Kernel extends HttpKernel
         'signed' => \Illuminate\Routing\Middleware\ValidateSignature::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
+        'role' => \App\Http\Middleware\RoleMiddleware::class, // Ensure this line exists
+    ];
 
-        // <--- Add your role middleware here
+    // Backward-compatibility: older Laravel versions use $routeMiddleware
+    protected $routeMiddleware = [
         'role' => \App\Http\Middleware\RoleMiddleware::class,
     ];
 }
