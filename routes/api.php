@@ -2,16 +2,37 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\SectionController;
+use App\Http\Controllers\ClientController;
+use App\Http\Controllers\ExpertController;
 use Illuminate\Support\Facades\Route;
 
-Route::post('/register', [AuthController::class, 'register']); // client
-Route::post('/login', [AuthController::class, 'login']);       // all
+// Public Routes
+Route::post('/register', [AuthController::class, 'register']);
+Route::post('/login', [AuthController::class, 'login']);
 
+// Protected Routes
 Route::middleware(['auth:sanctum'])->group(function () {
-    //client logout
+    
     Route::post('/logout', [AuthController::class, 'logout']);
-    //display sections
-    Route::get('/sections', [SectionController::class, 'index']);
-    //display specific section with its services
-    Route::get('/sections/{section}', [SectionController::class, 'show']);
+
+    // --- CLIENT ROUTES ---
+    Route::middleware('role:client')->group(function () {
+        // Profile Management
+        Route::get('/client/profile', [ClientController::class, 'profile']);
+        Route::put('/client/profile', [ClientController::class, 'updateProfile']);
+
+        // Expert Directory (for clients to view)
+        Route::get('/experts', [ClientController::class, 'indexExperts']);
+        Route::get('/experts/{user}', [ClientController::class, 'showExpert']);
+
+        // Content
+        Route::get('/sections', [SectionController::class, 'index']);
+        Route::get('/sections/{section}', [SectionController::class, 'show']);
+    });
+
+    // --- EXPERT ROUTES ---
+    Route::middleware('role:expert')->group(function () {
+        Route::get('/expert/profile', [ExpertController::class, 'profile']);
+        // Add expert-only functions here later
+    });
 });
