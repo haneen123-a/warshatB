@@ -20,6 +20,8 @@ class ClientController extends Controller
         $validated = $request->validate([
             'name' => 'sometimes|string|max:255',
             'email' => 'sometimes|email|unique:users,email,' . $user->id,
+            'location' => 'sometimes|string',
+            'phone' => 'sometimes|string',
             'password' => 'sometimes|string|min:6|confirmed',
         ]);
 
@@ -37,17 +39,18 @@ class ClientController extends Controller
 
     public function indexExperts()
     {
-        $experts = User::where('role', 'expert')->get();
+        $experts = User::where('role', 'expert')->with('expertProfile')->get();
         return response()->json($experts, 200);
     }
 
-    public function showExpert(User $user)
+    public function showExpert($id)
     {
+        $expert = User::where('role', 'expert')->with('expertProfile')->find($id);
         // Check if the user being requested is actually an expert
-        if ($user->role !== 'expert') {
+        if (!$expert) {
             return response()->json(['message' => 'Expert not found.'], 404);
         }
 
-        return response()->json($user, 200);
+        return response()->json($expert, 200);
     }
 }

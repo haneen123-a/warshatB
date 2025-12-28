@@ -23,7 +23,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
         // Expert Directory (for clients to view)
         Route::get('/experts', [ClientController::class, 'indexExperts']);
-        Route::get('/experts/{user}', [ClientController::class, 'showExpert']);
+        Route::get('/experts/{id}', [ClientController::class, 'showExpert']);
 
         // Content
         Route::get('/sections', [SectionController::class, 'index']);
@@ -33,6 +33,6 @@ Route::middleware(['auth:sanctum'])->group(function () {
     // --- EXPERT ROUTES ---
     Route::middleware('role:expert')->group(function () {
         Route::get('/expert/profile', [ExpertController::class, 'profile']);
-        // Add expert-only functions here later
+        Route::put('/expert/profile', [ExpertController::class, 'updateProfile']);
     });
 });
