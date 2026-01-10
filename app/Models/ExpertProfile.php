@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class ExpertProfile extends Model
 {
-    protected $fillable = ['user_id', 'major', 'description'];
+    protected $fillable = ['user_id', 'major', 'description', 'image', 'is_active',];
 
     public function user()
     {

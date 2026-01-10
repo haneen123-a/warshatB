@@ -40,21 +40,19 @@ class DatabaseSeeder extends Seeder
         // 2. Create Sections and their Services
         $sections = [
             [
-                'name' => 'House Works',
-                'description' => 'Professional help for your home maintenance and organization.',
+                'name' => 'كهرباء ',
+                'description' => 'يحتوي قسم الكهرباء على كل شيء يتعلق بالأمور الكهربائية مثل: صيانة الأعطال، تمديد الأسلاك، وتركيب الإضاءة والأجهزة.',
                 'services' => [
-                    ['name' => 'Moving', 'description' => 'Help with packing and transporting furniture.'],
-                    ['name' => 'Cleaning', 'description' => 'Deep cleaning services for apartments and houses.'],
-                    ['name' => 'Gardening', 'description' => 'Lawn mowing and garden maintenance.']
+                    ['name' => 'كهرباء منزلية', 'description' => 'Hحلول سريعة وجذرية لجميع مشاكل التماس الكهربائي، انقطاع التيار، وضعف الجهد في المنزل.'],
+                    ['name' => 'ادوات كهربائية', 'description' => 'إصلاح وصيانة جميع الأجهزة والأدوات الكهربائية المنزلية بدقة عالية مع تشخيص سريع للأعطال.']
                 ]
             ],
             [
-                'name' => 'Repair',
-                'description' => 'Technical support and fixing for appliances and systems.',
+                'name' => 'سباكة',
+                'description' => 'إصلاح التسريبات، تركيب الأدوات الصحية، صيانة شبكات المياه، ومعالجة انسداد الصرف.',
                 'services' => [
-                    ['name' => 'Fix electronic devices', 'description' => 'Repairing phones, laptops, and TVs.'],
-                    ['name' => 'Plumbing', 'description' => 'Fixing leaks and installing pipes.'],
-                    ['name' => 'Electricity', 'description' => 'Wiring and electrical repairs.']
+                    ['name' => 'تركيب أدوات صحية', 'description' => 'تركيب وتغيير المغاسل والخلاطات باحترافية.'],
+                    ['name' => 'إصلاح تسريبات', 'description' => 'كشف وإصلاح تسريبات المياه تحت الأرض وفي الجدران.']
                 ]
             ],
         ];
@@ -74,16 +72,20 @@ class DatabaseSeeder extends Seeder
         // 3. Create Experts with Profiles
         $experts = [
             [
-                'name' => 'Ahmed Repairman',
+                'name' => 'عمر الاحمد',
                 'email' => 'expert1@example.com',
-                'major' => 'Electronics Engineer',
-                'description' => 'I have 10 years of experience in fixing all kinds of digital devices.'
+                'major' => 'فني كهرباء منزلية',
+                'description' => 'خبرة واسعة في تمديدات الكهرباء وصيانة الأعطال المنزلية.',
+                'image' => 'experts/omar.jpg',
+                'is_active' => true
             ],
             [
-                'name' => 'Sara Mover',
+                'name' => 'أحمد محمد',
                 'email' => 'expert2@example.com',
-                'major' => 'Logistics Specialist',
-                'description' => 'Expert in home organization and heavy furniture moving.'
+                'major' => 'فني سباكة وصرف صحي',
+                'description' => 'متخصص في كشف التسريبات وتركيب أطقم الحمامات.',
+                'image' => 'experts/ahmed.jpg',
+                'is_active' => true
             ]
         ];
 
@@ -94,13 +96,15 @@ class DatabaseSeeder extends Seeder
                 'password' => Hash::make('password'),
                 'role' => 'expert',
                 'phone' => '555000' . rand(10, 99),
-                'location' => 'City Center'
+                'location' => 'دمشق'
             ]);
 
             ExpertProfile::create([
                 'user_id' => $user->id,
                 'major' => $data['major'],
-                'description' => $data['description']
+                'description' => $data['description'],
+                'image' => $data['image'], 
+                'is_active' => $data['is_active']
             ]);
         }
     }
