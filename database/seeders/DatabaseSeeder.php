@@ -34,7 +34,7 @@ class DatabaseSeeder extends Seeder
             'password' => Hash::make('password'),
             'role' => 'client',
             'phone' => '1234567890',
-            'location' => 'Downtown'
+            'location' => 'دمشق'
         ]);
 
         // 2. Create Sections and their Services
@@ -43,7 +43,7 @@ class DatabaseSeeder extends Seeder
                 'name' => 'كهرباء ',
                 'description' => 'يحتوي قسم الكهرباء على كل شيء يتعلق بالأمور الكهربائية مثل: صيانة الأعطال، تمديد الأسلاك، وتركيب الإضاءة والأجهزة.',
                 'services' => [
-                    ['name' => 'كهرباء منزلية', 'description' => 'Hحلول سريعة وجذرية لجميع مشاكل التماس الكهربائي، انقطاع التيار، وضعف الجهد في المنزل.'],
+                    ['name' => 'كهرباء منزلية', 'description' => 'حلول سريعة وجذرية لجميع مشاكل التماس الكهربائي، انقطاع التيار، وضعف الجهد في المنزل.'],
                     ['name' => 'ادوات كهربائية', 'description' => 'إصلاح وصيانة جميع الأجهزة والأدوات الكهربائية المنزلية بدقة عالية مع تشخيص سريع للأعطال.']
                 ]
             ],
@@ -64,48 +64,33 @@ class DatabaseSeeder extends Seeder
             $section = Section::create($sectionData);
 
             foreach ($services as $serviceData) {
-                $serviceData['section_id'] = $section->id;
-                Service::create($serviceData);
+                    // إنشاء الخدمة
+                    $service = Service::create([
+                        'section_id' => $section->id,
+                        'name' => $serviceData['name'],
+                        'description' => $serviceData['description']
+                    ]);
             }
-        }
 
         // 3. Create Experts with Profiles
-        $experts = [
-            [
-                'name' => 'عمر الاحمد',
-                'email' => 'expert1@example.com',
-                'major' => 'فني كهرباء منزلية',
-                'description' => 'خبرة واسعة في تمديدات الكهرباء وصيانة الأعطال المنزلية.',
-                'image' => 'experts/omar.jpg',
-                'is_active' => true
-            ],
-            [
-                'name' => 'أحمد محمد',
-                'email' => 'expert2@example.com',
-                'major' => 'فني سباكة وصرف صحي',
-                'description' => 'متخصص في كشف التسريبات وتركيب أطقم الحمامات.',
-                'image' => 'experts/ahmed.jpg',
-                'is_active' => true
-            ]
-        ];
 
-        foreach ($experts as $data) {
-            $user = User::create([
-                'name' => $data['name'],
-                'email' => $data['email'],
-                'password' => Hash::make('password'),
-                'role' => 'expert',
-                'phone' => '555000' . rand(10, 99),
-                'location' => 'دمشق'
-            ]);
+        $expertUser = User::create([
+                    'name' => 'الخبير لخدمة ' . $service->name,
+                    'email' => 'expert_service_' . $service->id . '@example.com',
+                    'password' => Hash::make('password'),
+                    'role' => 'expert',
+                    'phone' => '05' . rand(10000000, 99999999),
+                    'location' => 'دمشق'
+                ]);
 
-            ExpertProfile::create([
-                'user_id' => $user->id,
-                'major' => $data['major'],
-                'description' => $data['description'],
-                'image' => $data['image'], 
-                'is_active' => $data['is_active']
-            ]);
+                ExpertProfile::create([
+                    'user_id' => $expertUser->id,
+                    'service_id' => $service->id, // هذا الحقل هو المسؤول عن ظهور الخبير في مصفوفة الخدمة
+                    'major' => 'متخصص ' . $service->name,
+                    'description' => 'خبير فني يمتلك مهارات عالية في مجال ' . $service->name,
+                    'image' => null,
+                    'is_active' => true
+                ]);
         }
     }
 }
